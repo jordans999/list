@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style media="screen">
+      textarea, label{
+        display:block;
+        margin: auto;
+      }
+      body{
+        background-color: #dfdfdf;
+      }
+      *{
+        font-family: verdana;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+      .ib{
+        padding: 0 1%;
+        display: inline-block;
+        font-size: 1.25em;
+        font-weight: bold;
+        color: #666;
+      }
+      #mr{
+        width: 70%;
+        margin: 1% auto;
+        background-color: #efefef;
+        padding: 1% 5% 4%;
+      }
+      #catBar, #listWrap{
+        width: 90%;
+        margin: 2% auto;
+      }
+      span:hover{
+          background-color: #fff;
+          color: #444;
+          cursor: grab;
+      }
+
+    </style>
+  </head>
+  <body>
+    <!-- <canvas id="canvas" width="700" height="700"></canvas> -->
+    <div id="mr">
+      <h2>THE LISTINATOR 2K</h2>
+      <div id="catBar">
+
+      </div>
+      <textarea autofocus rows="1" cols="60" id="mainInput" placeholder="category, item, item..."></textarea>
+      <div class="listWrap" id="listWrap">
+
+      </div>
+    </div>
+    <!-- <script src="main.js" charset="utf-8"></script> -->
+    <script charset="utf-8">
+    let cats = {
+      baking: [],
+      bread: [],
+      canned: [],
+      cereal: [],
+      cookies: [],
+      condiments: [],
+      dairy: [],
+      deli: [],
+      drinks: [],
+      frozen: [],
+      health: [],
+      household: [],
+      meat: [],
+      pasta: [],
+      personal: [],
+      pet: [],
+      produce: [],
+      snacks: [],
+    };
+
+    let textInput = document.getElementById('mainInput'),
+        listDiv = document.getElementById('listWrap'),
+        catBar = document.getElementById('catBar');
+
+    //get list of categories
+    let oks = Object.keys(cats);
+    //format array
+    for(let i = 0; i < oks.length; i++){
+      let ns = document.createElement("span");
+      ns.setAttribute("class", "ib");
+      ns.innerText=oks[i];
+      ns.addEventListener("click", (e)=> {
+        console.log(ns.innerText)
+        textInput.value = ns.innerText +", ";
+        textInput.focus();
+      })
+      catBar.appendChild(ns)
+      // oks[i] = `<span class="ib">${oks[i]}</span>`;
+    }
+    // oks = oks.join("")
+    // catBar.innerHTML=oks;
+
+    document.addEventListener("keypress", (e)=>{
+      if(e.keyCode === 13){
+        if(textInput.value != ""){
+          let raw = textInput.value;
+          console.log(raw)
+          let formatted = raw.split(", ");
+          let keys = Object.keys(cats)
+          console.log(keys)
+          if(formatted[0] in cats){
+            let selCat = formatted[0];
+            formatted.shift();
+            cats[selCat].push(...formatted);
+            //list formatted...
+            //clear listDiv
+            listDiv.innerHTML = "";
+            //create html
+            Object.keys(cats).forEach(category => {
+              //repopulate listDiv
+              if(cats[category].length > 1){
+                listDiv.innerHTML += `<h3>${category}</h3>`;
+                listDiv.innerHTML += "<ul>"
+                cats[category].forEach(entry => {
+                  listDiv.innerHTML+=`<li>${entry}</li>`
+                })
+                listDiv.innerHTML+= "</ul>";
+              }
+            });
+            textInput.value="";
+          }else{
+            alert("Please use a valid category in spot 1.")
+          }
+          console.log(formatted)
+        }else{
+          alert("Please use correct format: category, item, item...");
+        }
+      }
+    })
+
+    </script>
+  </body>
+</html>
