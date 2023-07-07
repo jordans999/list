@@ -123,6 +123,7 @@
       if(e.keyCode === 13){
         if(textInput.value != ""){
           let raw = textInput.value;
+          textInput.value="";
           console.log(raw)
           let formatted = raw.split(", ");
           let keys = Object.keys(cats)
@@ -155,7 +156,7 @@
           alert("Please use correct format: category, item, item...");
         }
       }
-      textInput.value="";
+      
     })
 
     </script>
